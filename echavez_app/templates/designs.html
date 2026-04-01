@@ -1,0 +1,411 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shanshai S. Echavez | Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #ff85a2;
+            --accent-light: #ffb1c1;
+            --bg: #08080c;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-dim: #a0a0a0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- Unique Animated Background --- */
+        .aurora-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 0% 0%, #1a0b12 0%, transparent 50%),
+                        radial-gradient(circle at 100% 100%, #0d0d1a 0%, transparent 50%);
+        }
+
+        .blob {
+            position: absolute;
+            width: 500px; height: 500px;
+            background: var(--accent);
+            filter: blur(120px);
+            border-radius: 50%;
+            opacity: 0.15;
+            animation: move 20s infinite alternate;
+        }
+
+        @keyframes move {
+            from { transform: translate(-10%, -10%); }
+            to { transform: translate(20%, 20%); }
+        }
+
+        /* --- Responsive Navigation --- */
+        nav {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 15, 20, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 12px 30px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            gap: 25px;
+            z-index: 1000;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        }
+
+        nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 1.3rem;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent);
+            transform: scale(1.2) translateY(-5px);
+        }
+
+        /* --- Main Content --- */
+        main {
+            padding: 80px 10%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 150px;
+        }
+
+        .section {
+            display: none;
+            animation: slideIn 0.8s ease-out forwards;
+        }
+
+        .section.active-content { display: block; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(40px); filter: blur(10px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        /* --- Unique Hero / Home --- */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+            padding-top: 40px;
+        }
+
+        .profile-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-hex {
+            width: 320px;
+            height: 320px;
+            background: var(--accent);
+            /* Unique Hexagon Shape */
+            clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 50px var(--pink-glow);
+        }
+
+        .profile-hex img {
+            width: 96%;
+            height: 96%;
+            object-fit: cover;
+            clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+            background: #111;
+        }
+
+        .hero-text h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 25px;
+        }
+
+        .hero-text span {
+            background: linear-gradient(to right, var(--accent), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- Cards & Grids --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 35px;
+            border-radius: 30px;
+            transition: 0.5s;
+            backdrop-filter: blur(5px);
+        }
+
+        .glass-card:hover {
+            border-color: var(--accent);
+            background: rgba(255, 133, 162, 0.08);
+            transform: translateY(-10px) rotate(1deg);
+        }
+
+        .pill-box { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 25px; }
+        .pill {
+            padding: 10px 25px;
+            border-radius: 50px;
+            background: rgba(255, 133, 162, 0.1);
+            border: 1px solid var(--glass-border);
+            color: var(--accent-light);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 960px) {
+            .hero { flex-direction: column-reverse; text-align: center; }
+            .hero-text h1 { font-size: 3rem; }
+            .profile-hex { width: 250px; height: 250px; }
+            nav { width: 85%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="aurora-bg">
+        <div class="blob"></div>
+    </div>
+
+    <nav>
+    <a onclick="showSection('home')" id="link-home" class="active"><i class="fa-solid fa-ghost"></i></a>
+    <a onclick="showSection('work')" id="link-work"><i class="fa-solid fa-folder-open"></i></a>
+    <a onclick="showSection('education')" id="link-education"><i class="fa-solid fa-graduation-cap"></i></a>
+    <a onclick="showSection('skills')" id="link-skills"><i class="fa-solid fa-wand-magic-sparkles"></i></a>
+    <a onclick="showSection('hobbies')" id="link-hobbies"><i class="fa-solid fa-heart"></i></a>
+    <a onclick="showSection('contact')" id="link-contact"><i class="fa-solid fa-paper-plane"></i></a>
+</nav>
+
+    <main>
+        <div id="home" class="section active-content">
+            <div class="hero">
+                <div class="hero-text">
+                    <p style="color: var(--accent); letter-spacing: 5px; font-weight: 600; text-transform: uppercase;">Welcome to my portfolio!</p>
+                    <h1>SHANSHAI S.<br><span>ECHAVEZ</span></h1>
+                    <p style="color: var(--text-dim); max-width: 550px; line-height: 1.8; margin-bottom: 40px; font-size: 1.1rem;">
+                        A student at <b style="color:white">Negros Oriental State University</b>. I have a growing interest in academic research and digital storytelling, and I am constantly looking for ways to improve my skills and learn new things.
+                    </p>
+                    <div class="pill-box">
+                        <span class="pill">Never stop learning cause life never stop  teaching.</span>
+                    </div>
+                </div>
+                <div class="profile-wrapper">
+                    <div class="profile-hex">
+                        <img src="{% static 'profile.jpg' %}" alt="Shanshai S. Echavez">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="work" class="section">
+            <h2 style="font-size: 3rem; margin-bottom: 30px;">Projects & <span style="color:var(--accent)">Work</span></h2>
+            <div class="grid">
+                <div class="glass-card">
+                    <div style="height: 180px; background: url('{% static 'agentblazer.png' %}'); background-size: cover; background-position: center;"></div>
+                    <div style="padding: 20px;"><h3>Agent Blazer</h3><p style="color:var(--text-dim);">Project Development</p></div>
+                </div>
+                <div class="glass-card">
+                    <div style="height: 180px; background: url('{% static 'geeksforgeeks.png' %}'); background-size: cover; background-position: center;"></div>
+                    <div style="padding: 20px;"><h3>GeeksforGeeks</h3><p style="color:var(--text-dim);">Technical Milestones</p></div>
+                </div>
+                <div class="glass-card">
+                    <div style="height: 180px; background: url('{% static 'seminar.png' %}'); background-size: cover; background-position: center;"></div>
+                    <div style="padding: 20px;"><h3>Academic Seminar</h3><p style="color:var(--text-dim);">Certificates achieved</p></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="education" class="section">
+    <h2 style="font-size: 3rem; margin-bottom: 10px;">My <span style="color:var(--accent)">Education</span></h2>
+    <p style="color: var(--text-dim); margin-bottom: 40px;">My educational background from elementary school until now.</p>
+
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+
+        <div class="glass-card" style="border-left: 5px solid var(--accent); position: relative;">
+            <span style="position: absolute; right: 30px; top: 30px; color: var(--accent); font-weight: 800; font-size: 0.8rem;">2023 - ONGOING</span>
+            <h3 style="color: white; font-size: 1.4rem;">Negros Oriental State University</h3>
+            <p style="color: var(--accent-light); font-weight: 600; margin-bottom: 10px;">College Student</p>
+            <p style="color: var(--text-dim); font-size: 0.9rem;"><i class="fa-solid fa-location-dot"></i> Bayawan–Sta. Catalina Campus</p>
+        </div>
+
+        <div class="glass-card" style="border-left: 5px solid #fff;">
+            <span style="position: absolute; right: 30px; top: 30px; color: var(--text-dim); font-weight: 800; font-size: 0.8rem;">2021 - 2023</span>
+            <h3 style="color: white; font-size: 1.4rem;">Santa Catalina National High School</h3>
+            <p style="color: var(--accent-light); font-weight: 600; margin-bottom: 10px;">Senior High School Graduate</p>
+            <p style="color: var(--text-dim); font-size: 0.9rem;"><i class="fa-solid fa-location-dot"></i> Santa Catalina, Negros Oriental</p>
+        </div>
+
+        <div class="glass-card" style="border-left: 5px solid var(--accent);">
+            <span style="position: absolute; right: 30px; top: 30px; color: var(--text-dim); font-weight: 800; font-size: 0.8rem;">2017 - 2021</span>
+            <h3 style="color: white; font-size: 1.4rem;">Santa Catalina National High School</h3>
+            <p style="color: var(--accent-light); font-weight: 600; margin-bottom: 10px;">Junior High School Graduate</p>
+            <p style="color: var(--text-dim); font-size: 0.9rem;"><i class="fa-solid fa-location-dot"></i> Santa Catalina, Negros Oriental</p>
+        </div>
+
+        <div class="glass-card" style="border-left: 5px solid #fff;">
+            <span style="position: absolute; right: 30px; top: 30px; color: var(--text-dim); font-weight: 800; font-size: 0.8rem;">2012 - 2017</span>
+            <h3 style="color: white; font-size: 1.4rem;">San Jose Elementary School</h3>
+            <p style="color: var(--accent-light); font-weight: 600; margin-bottom: 10px;">Elementary Graduate</p>
+            <p style="color: var(--text-dim); font-size: 0.9rem;"><i class="fa-solid fa-location-dot"></i> San Jose, Santa Catalina, Negros Oriental</p>
+        </div>
+
+    </div>
+</div>
+
+        <div id="skills" class="section">
+    <h2 style="font-size: 3rem; margin-bottom: 10px;">Professional <span style="color:var(--accent)">Skills</span></h2>
+    <p style="color: var(--text-dim); margin-bottom: 40px;">My technical toolkit and core competencies.</p>
+
+    <div class="grid">
+        <div class="glass-card" style="border-left: 4px solid var(--accent);">
+            <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-users-gears" style="margin-right:10px; color: var(--accent);"></i> Core Strengths</h3>
+            <div class="pill-box">
+                <span class="pill">Teamwork & Collaboration</span>
+                <span class="pill">Continuous Learning</span>
+                <span class="pill">Attention to Details</span>
+            </div>
+        </div>
+
+        <div class="glass-card" style="border-left: 4px solid #fff;">
+            <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-code" style="margin-right:10px; color: var(--accent);"></i> Programming</h3>
+            <div class="pill-box">
+                <span class="pill">Java</span>
+                <span class="pill">Python</span>
+                <span class="pill">C++</span>
+                <span class="pill">SQL</span>
+            </div>
+        </div>
+
+        <div class="glass-card" style="border-left: 4px solid var(--accent);">
+            <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-briefcase" style="margin-right:10px; color: var(--accent);"></i> Productivity</h3>
+            <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 10px;">Microsoft Office Suite (Advanced):</p>
+            <div class="pill-box">
+                <span class="pill">Excel</span>
+                <span class="pill">Word</span>
+                <span class="pill">PowerPoint</span>
+            </div>
+        </div>
+
+        <div class="glass-card" style="border-left: 4px solid #fff;">
+            <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-pen-nib" style="margin-right:10px; color: var(--accent);"></i> Design</h3>
+            <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 10px;">Adobe Photoshop:</p>
+            <div class="pill-box">
+                <span class="pill">UI/UX Assets</span>
+                <span class="pill">Image Editing</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div id="hobbies" class="section">
+    <h2 style="font-size: 3rem; margin-bottom: 10px;">My <span style="color:var(--accent)">Hobbies</span></h2>
+    <p style="color: var(--text-dim); margin-bottom: 40px;">My world beyond academics — where I create and observe.</p>
+
+    <div class="grid">
+        <div class="glass-card">
+            <h3 style="margin-bottom: 15px; color: var(--accent);"><i class="fa-solid fa-pen-nib" style="margin-right:10px;"></i> Creative Soul</h3>
+            <div class="pill-box">
+                <span class="pill">Creative Writing</span>
+                <span class="pill">Video Editing</span>
+                <span class="pill">Nature Photography</span>
+                <span class="pill">Observing People</span>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h3 style="margin-bottom: 15px; color: var(--accent);"><i class="fa-solid fa-headphones" style="margin-right:10px;"></i> Daily Escapes</h3>
+            <div class="pill-box">
+                <span class="pill">Reading Books</span>
+                <span class="pill">Watching Anime</span>
+                <span class="pill">Listening to Music</span>
+            </div>
+        </div>
+
+        <div class="glass-card" style="grid-column: 1 / -1;">
+            <h3 style="margin-bottom: 15px; color: var(--accent);"><i class="fa-solid fa-earth-asia" style="margin-right:10px;"></i> Languages I'm Learning</h3>
+            <div class="pill-box">
+                <span class="pill">🇰🇷 Korean</span>
+                <span class="pill">🇯🇵 Japanese</span>
+                <span class="pill">🇪🇸 Spanish</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+       <div id="contact" class="section">
+    <h2 style="font-size: 3rem; text-align: center; margin-bottom: 40px;">Say <span style="color:var(--accent)">Hello!</span></h2>
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); max-width: 1000px; margin: 0 auto;">
+
+        <a href="https://www.facebook.com/me/" target="_blank" class="glass-card" style="text-decoration: none; color: inherit; text-align: center; padding: 25px;">
+            <i class="fa-brands fa-facebook-f" style="font-size: 2rem; color: var(--accent);"></i>
+            <p style="margin-top: 15px; font-size: 0.9rem; font-weight: 600;">Facebook</p>
+        </a>
+
+        <a href="https://instagram.com/mf.shan_22" target="_blank" class="glass-card" style="text-decoration: none; color: inherit; text-align: center; padding: 25px;">
+            <i class="fa-brands fa-instagram" style="font-size: 2rem; color: var(--accent);"></i>
+            <p style="margin-top: 15px; font-size: 0.9rem; font-weight: 600;">Instagram</p>
+        </a>
+
+        <a href="https://www.linkedin.com/in/shanshai-echavez-a846412a0/" target="_blank" class="glass-card" style="text-decoration: none; color: inherit; text-align: center; padding: 25px;">
+            <i class="fa-brands fa-linkedin-in" style="font-size: 2rem; color: var(--accent);"></i>
+            <p style="margin-top: 15px; font-size: 0.9rem; font-weight: 600;">LinkedIn</p>
+        </a>
+
+        <a href="https://github.com/yourusername" target="_blank" class="glass-card" style="text-decoration: none; color: inherit; text-align: center; padding: 25px;">
+            <i class="fa-brands fa-github" style="font-size: 2rem; color: var(--accent);"></i>
+            <p style="margin-top: 15px; font-size: 0.9rem; font-weight: 600;">GitHub</p>
+        </a>
+
+        <a href="mailto:echavezshanshai@email.com" class="glass-card" style="text-decoration: none; color: inherit; text-align: center; padding: 25px;">
+            <i class="fa-solid fa-envelope-open-text" style="font-size: 2rem; color: var(--accent);"></i>
+            <p style="margin-top: 15px; font-size: 0.9rem; font-weight: 600;">Gmail</p>
+        </a>
+
+    </div>
+</div>
+
+    <script>
+        function showSection(sectionId) {
+            // Remove active classes
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active-content'));
+            document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+
+            // Add active classes to current
+            const activeSec = document.getElementById(sectionId);
+            activeSec.classList.add('active-content');
+            document.getElementById('link-' + sectionId).classList.add('active');
+
+            // Scroll to top with smooth effect
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
